@@ -1,0 +1,15 @@
+node_modules
+.next
+.next-e2e
+.git
+.env
+.env.*
+!.env.example
+_future
+.local
+.impeccable
+test-results
+playwright-report
+coverage
+logs
+*.tsbuildinfo

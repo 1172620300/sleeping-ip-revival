@@ -1,0 +1,63 @@
+name: daosen-phase1
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: daosen
+      POSTGRES_USER: daosen
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-daosen_local_change_me}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - daosen-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U daosen -d daosen"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      target: tools
+    environment:
+      DATABASE_URL: postgresql://daosen:${POSTGRES_PASSWORD:-daosen_local_change_me}@postgres:5432/daosen?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["pnpm", "db:migrate"]
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      target: runner
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgresql://daosen:${POSTGRES_PASSWORD:-daosen_local_change_me}@postgres:5432/daosen?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?Create .env and set a random NEXTAUTH_SECRET first}
+      AI_PROVIDER: mock
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped
+
+  seed:
+    build:
+      context: .
+      target: tools
+    profiles: ["tools"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgresql://daosen:${POSTGRES_PASSWORD:-daosen_local_change_me}@postgres:5432/daosen?schema=public
+      ALLOW_DEMO_SEED: "true"
+    command: ["pnpm", "db:seed"]
+    restart: "no"
+
+volumes:
+  daosen-postgres:

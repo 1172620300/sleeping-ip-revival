@@ -1,0 +1,6 @@
+packages:
+  - .
+# Pin patched transitive dependencies; verified by generate/migrate/build/tests.
+overrides:
+  postcss: 8.5.28
+  '@prisma/config>deepmerge-ts': 8.0.2

@@ -1,0 +1,22 @@
+{
+  "name": "daosen-ai", "version": "0.1.0", "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build", "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit", "test": "vitest run", "test:e2e": "playwright test",
+    "db:generate": "prisma generate", "db:migrate": "prisma migrate deploy", "db:seed": "tsx prisma/seed.ts",
+    "setup": "node scripts/setup.mjs",
+    "db:local": "node scripts/postgres.mjs", "db:validate": "prisma validate", "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3", "bcryptjs": "^3.0.2", "lucide-react": "^0.468.0",
+    "next": "^15.5.9", "next-auth": "^4.24.13", "react": "^19.1.0", "react-dom": "^19.1.0", "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1", "@tailwindcss/postcss": "^4.1.0", "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.13.0", "@types/react": "^19.0.8", "@types/react-dom": "^19.0.3",
+    "dotenv": "^16.4.7", "embedded-postgres": "16.14.0-beta.17", "prisma": "6.19.3", "tailwindcss": "^4.1.0", "tsx": "^4.19.3", "typescript": "^5.7.3", "vitest": "^3.0.6"
+  },
+  "prisma": {"seed": "tsx prisma/seed.ts"}, "engines": {"node": ">=22.12"},
+  "packageManager": "pnpm@11.19.0"
+}

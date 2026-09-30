@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleCode {
+  DESIGNER
+  STORE_OWNER
+  STAFF
+  ADMIN
+}
+
+enum AccountStatusCode {
+  PENDING
+  APPROVED
+  REJECTED
+  DISABLED
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique @db.VarChar(254)
+  name             String            @db.VarChar(60)
+  passwordHash     String
+  role             RoleCode          @default(DESIGNER)
+  status           AccountStatusCode @default(PENDING)
+  phone            String?           @db.VarChar(30)
+  purpose          String?           @db.VarChar(300)
+  reviewNote       String?           @db.VarChar(300)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  roleDefinition   Role              @relation(fields: [role], references: [code], onDelete: Restrict)
+  statusDefinition AccountStatus     @relation(fields: [status], references: [code], onDelete: Restrict)
+
+  @@index([role])
+  @@index([status])
+}
+
+/// Enum-backed lookup keys prevent unknown roles and code/reference drift.
+model Role {
+  code        RoleCode @id
+  label       String
+  description String
+  users       User[]
+}
+
+model AccountStatus {
+  code        AccountStatusCode @id
+  label       String
+  description String
+  users       User[]
+}

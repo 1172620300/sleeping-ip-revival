@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies and package caches
+node_modules/
+.pnpm-store/
+**/.npm-cache/
+
+# Build output and test artifacts
+dist/
+**/.next/
+**/.next-e2e/
+**/.vite/
+coverage/
+playwright-report/
+test-results/
+artifacts/
+
+# Local databases and browser/runtime state
+**/.local/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Logs and generated task state
+*.log
+imaideo-demo/video-tasks-p-draft.json

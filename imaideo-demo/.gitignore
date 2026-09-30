@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+artifacts/
+*.log
+.npm-cache/
+.env
+.env.*
+!.env.example
